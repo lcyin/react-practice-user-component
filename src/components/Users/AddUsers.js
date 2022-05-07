@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import Card from '../UI/Card';
 import Button from '../UI/Button';
 import classes from './AddUsers.module.css';
-
+/**
+ * Handle User Input
+ */
 const AddUser = (props) => {
   const [inputUsername, setInputUsername] = useState('');
   const [inputAge, setInputAge] = useState('');
