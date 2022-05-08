@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Card from '../UI/Card';
 import Button from '../UI/Button';
 import ErrorModel from '../UI/ErrorModel ';
@@ -9,13 +9,18 @@ import classes from './AddUsers.module.css';
  * Handle User Input
  */
 const AddUser = (props) => {
+  const nameRef = useRef();
+  const ageRef = useRef();
   const [inputUsername, setInputUsername] = useState('');
   const [inputAge, setInputAge] = useState('');
   const [error, setError] = useState();
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    if (inputUsername.trim().length === 0 || inputAge.trim().length === 0) {
+    const enteredName = nameRef.current.value;
+    const enteredAge = ageRef.current.value;
+
+    if (enteredName.trim().length === 0 || enteredAge.trim().length === 0) {
       setError({
         title: 'Invalid input',
         message: 'Please enter a valid name and age.',
@@ -23,25 +28,28 @@ const AddUser = (props) => {
       return;
     }
     // add + to ensure number
-    if (+inputAge < 1) {
+    if (+enteredAge < 1) {
       setError({
         title: 'Invalid age',
         message: 'Please enter a valid age (> 0).',
       });
       return;
     }
-    props.onAddUser(inputUsername, inputAge);
-    setInputUsername('');
-    setInputAge('');
+    props.onAddUser(enteredName, enteredAge);
+    // not recommend change html DON value directly
+    nameRef.current.value = '';
+    ageRef.current.value = '';
+    // setInputUsername('');
+    // setInputAge('');
   };
 
-  const usernameChangeHandler = (event) => {
-    setInputUsername(event.target.value);
-  };
+  // const usernameChangeHandler = (event) => {
+  //   setInputUsername(event.target.value);
+  // };
 
-  const ageChangeHandler = (event) => {
-    setInputAge(event.target.value);
-  };
+  // const ageChangeHandler = (event) => {
+  //   setInputAge(event.target.value);
+  // };
 
   const errorHandler = () => {
     setError(null);
@@ -62,15 +70,17 @@ const AddUser = (props) => {
           <input
             id="username"
             type="text"
-            value={inputUsername}
-            onChange={usernameChangeHandler}
+            // value={inputUsername}
+            // onChange={usernameChangeHandler}
+            ref={nameRef}
           />
           <label htmlFor="age">Age (Years)</label>
           <input
             id="age"
             type="number"
-            value={inputAge}
-            onChange={ageChangeHandler}
+            // value={inputAge}
+            // onChange={ageChangeHandler}
+            ref={ageRef}
           />
           <Button type="submit">Add User</Button>
         </form>
